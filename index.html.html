@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安平桥 · 水心跨海</title>
+    <!-- 字体与基础样式 —— 手作感，避免太“AI”的整齐 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        /* 全局 —— 带一点旧纸色调，故意不用系统默认纯白 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f2efe6;
+            background-image: 
+                linear-gradient(rgba(190, 160, 130, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(190, 160, 130, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 400;
+            color: #2e2b26;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        /* 主卡片 —— 像是手工裁剪的笔记纸 */
+        .bridge-note {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: rgba(255, 251, 240, 0.85);
+            backdrop-filter: blur(2px);
+            border: 1px solid #d6ccbc;
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 245, 225, 0.8);
+            border-radius: 28px 28px 24px 24px;
+            padding: 2rem 2rem 2.5rem 2rem;
+            position: relative;
+        }
+
+        /* 模拟手工贴纸/标头 */
+        .notebook-tab {
+            position: absolute;
+            top: -12px;
+            left: 32px;
+            background: #b8a99a;
+            color: #fef7e9;
+            font-size: 0.9rem;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px 30px 0 0;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+            border-bottom: 2px solid #7c6b5a;
+        }
+
+        .notebook-tab::before {
+            content: "✧ 宋元古桥 · 安平八景 ✧";
+            white-space: nowrap;
+        }
+
+        /* 标题区域 —— 故意错落对齐 */
+        .title-section {
+            margin-bottom: 1.8rem;
+            border-left: 6px solid #b5825e;
+            padding-left: 1.4rem;
+            margin-top: 0.5rem;
+        }
+
+        .title-section h1 {
+            font-size: 3.2rem;
+            font-weight: 500;
+            font-family: 'Times New Roman', 'Songti SC', serif;
+            letter-spacing: 2px;
+            color: #4d3b2c;
+            line-height: 1.1;
+            text-shadow: 2px 2px 0 #e0d5c4;
+            margin-bottom: 0.25rem;
+        }
+
+        .title-section .subhead {
+            font-size: 1.1rem;
+            color: #7a6856;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .title-section .subhead span {
+            background: #dcd0c0;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #3f3329;
+        }
+
+        /* 新增故事引言区 —— 模仿视频中的叙述 */
+        .story-intro {
+            background: #e8dfd1;
+            border-radius: 30px;
+            padding: 1.2rem 2rem;
+            margin: 1.8rem 0 2.2rem 0;
+            border: 1px solid #cbb89e;
+            box-shadow: inset 0 2px 6px #faf3e8, 3px 4px 0 #ab9b86;
+            font-size: 1.05rem;
+            color: #3e342c;
+            position: relative;
+        }
+
+        .story-intro::before {
+            content: "📜";
+            position: absolute;
+            left: -10px;
+            top: -12px;
+            font-size: 2rem;
+            background: #f2efe6;
+            padding: 0 8px;
+            transform: rotate(-10deg);
+        }
+
+        /* 主要网格布局 —— 信息可视化区域 */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.9fr 1.2fr;
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* 每个卡片都带着手绘阴影和便签质感 */
+        .card {
+            background: #fcf8f0;
+            border: 1px solid #dad1c2;
+            border-radius: 20px;
+            padding: 1.4rem 1.2rem;
+            box-shadow: 4px 6px 0 #cfc4b2, 0 8px 16px -8px #bba98b;
+            transition: all 0.1s ease;
+        }
+
+        .card:hover {
+            box-shadow: 2px 3px 0 #cfc4b2, 0 10px 18px -8px #9e8e7a;
+            transform: translate(-1px, -1px);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            border-bottom: 2px dashed #c3aa8f;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4f3f30;
+        }
+
+        .card h3 i {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* 时间轴可视化 (手工风格) */
+        .timeline-viz {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            background: #b5825e;
+            border-radius: 50%;
+            border: 2px solid #ecd9c0;
+            flex-shrink: 0;
+        }
+
+        .timeline-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #c9b79e, #e3d6c4);
+            margin: 0 6px;
+        }
+
+        .timeline-year {
+            font-weight: 600;
+            color: #6f4f35;
+            min-width: 70px;
+            font-size: 0.95rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: #4e4134;
+        }
+
+        /* 数字突出展示 */
+        .stat-big {
+            font-size: 2.6rem;
+            font-weight: 450;
+            line-height: 1;
+            color: #826a50;
+            margin-right: 4px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .measure-unit {
+            font-size: 0.9rem;
+            color: #7d6e5d;
+        }
+
+        .stone-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+            margin-top: 0.8rem;
+        }
+
+        .stone-tag {
+            background: #dccfbd;
+            padding: 0.2rem 1rem 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            border-left: 4px solid #9f8a72;
+        }
+
+        /* 桥墩剖面 —— 纯CSS手工绘制 */
+        .pier-svg {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            margin: 1.2rem 0;
+            height: 100px;
+            background: linear-gradient(to top, #c1b19e 2px, #ebe1d2 2px);
+            background-size: 100% 4px;
+            position: relative;
+        }
+
+        .pier-svg::before {
+            content: "← 晋江";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            font-size: 0.7rem;
+            color: #6b5f52;
+            transform: rotate(-90deg) translateX(-50%);
+            opacity: 0.8;
+        }
+
+        .pier-svg::after {
+            content: "水头 →";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            font-size: 0.7rem;
+            color: #6b5f52;
+            transform: rotate(90deg) translateX(50%);
+            opacity: 0.8;
+        }
+
+        .pier {
+            width: 16px;
+            background: #7f8c8d;
+            background: linear-gradient(135deg, #8a7a66, #5f5343);
+            border-radius: 6px 6px 0 0;
+            box-shadow: -2px 0 0 #4a4036;
+            position: relative;
+        }
+
+        .pier1 { height: 42px; }
+        .pier2 { height: 68px; }
+        .pier3 { height: 36px; }
+        .pier4 { height: 82px; }
+        .pier5 { height: 28px; }
+        .pier6 { height: 54px; }
+
+        .pier::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 2px;
+            width: 12px;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,240,0.2), transparent);
+        }
+
+        /* 注解文字 */
+        .annotation {
+            background: #efe8db;
+            border-radius: 12px;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+            margin-top: 1.2rem;
+            border-left: 6px solid #bb9d81;
+            color: #3c342b;
+        }
+
+        /* 文化注脚区域 —— 改为故事叙述区，去除所有宗教相关内容 */
+        .cultural-marginalia {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #e7dfd1;
+            border-radius: 28px;
+            padding: 1.6rem 2rem;
+            margin-top: 2rem;
+            border: 1px solid #bba88f;
+            box-shadow: inset 0 2px 4px #f2eadc, 3px 5px 0 #ab9c88;
+            position: relative;
+        }
+
+        .cultural-marginalia::before {
+            content: "✎ 安平桥的故事";
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            background: #cbbaa8;
+            padding: 0.2rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #1e1b17;
+        }
+
+        .story-block {
+            flex: 2;
+            min-width: 260px;
+        }
+
+        .story-block p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #3f362d;
+            margin-bottom: 0.8rem;
+            text-indent: 2em;
+        }
+
+        .inscription-box {
+            flex: 1;
+            min-width: 140px;
+            background: #f7efe2;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 0 2px #b7a48e;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .inscription-box span {
+            font-size: 1.8rem;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-weight: 600;
+            color: #3d3a35;
+            letter-spacing: -6px;
+        }
+
+        /* 交互按钮 —— 土法自制 */
+        .interaction-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .handmade-button {
+            background: none;
+            border: 2px solid #9f856c;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            background-color: #f2e6d8;
+            box-shadow: 4px 4px 0 #8e795f;
+            cursor: default;
+            transition: 0.05s linear;
+            color: #4e3e2e;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .handmade-button:active {
+            box-shadow: 1px 1px 0 #8e795f;
+            transform: translate(3px, 3px);
+        }
+
+        /* 响应式 */
+        @media (max-width: 720px) {
+            .viz-grid {
+                grid-template-columns: 1fr;
+            }
+            .title-section h1 {
+                font-size: 2.6rem;
+            }
+        }
+
+        /* 一些小标记，模仿手写 */
+        .scribble {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            opacity: 0.15;
+            position: absolute;
+            font-size: 4rem;
+            bottom: 10px;
+            right: 20px;
+            color: #7a6248;
+            pointer-events: none;
+            transform: rotate(-5deg);
+        }
+    </style>
+</head>
+<body>
+<div class="bridge-note">
+    <!-- 手工折角签 -->
+    <div class="notebook-tab"></div>
+
+    <!-- 标题区 -->
+    <div class="title-section">
+        <h1>安平桥 · 五里跨海</h1>
+        <div class="subhead">
+            <span>世界最长海港石梁桥</span>
+            <span>南宋·绍兴八年(1138)</span>
+            <span>晋江安海—南安水头</span>
+        </div>
+    </div>
+
+    <!-- 故事引言区：模仿视频开篇叙述 -->
+    <div class="story-intro">
+        安平桥，作为中国古代海港石桥的杰出代表，承载着宋元时期泉州海洋贸易的繁荣记忆。然而，在现代喧嚣中，这座古桥的故事逐渐被淡忘。因此，我们希望通过信息可视化，让安平桥的营造智慧与历史文脉以鲜活的方式重现于世。
+    </div>
+
+    <!-- 信息可视化核心区：时间·尺度·构造 -->
+    <div class="viz-grid">
+        <!-- 卡片一：营造年表 (手工时间轴) -->
+        <div class="card">
+            <h3><i>⌛</i> 八百载·修造记</h3>
+            <div class="timeline-viz">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">1138年</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-desc">祖派始造石桥，未竟</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">1152年</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-desc">赵令衿续成，全长五里</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">明·永乐</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-desc">重修，增筑水心亭</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">清·道光</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-desc">大修，现存桥基规制</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">1961</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-desc">首批全国重点文保</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#c39a6b;"></div>
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-desc">列入世遗“泉州：宋元中国世界海洋商贸中心”</div>
+                </div>
+            </div>
+            <div class="annotation">
+                ⚑ 初建历时14年，跨越海域，潮急浪高，“睡木沉基”筑墩。
+            </div>
+        </div>
+
+        <!-- 卡片二：尺度的震撼 (数字与巨石) -->
+        <div class="card">
+            <h3><i>📏</i> 石梁·跨度·墩台</h3>
+            <div style="display: flex; align-items: baseline; flex-wrap: wrap;">
+                <span class="stat-big">2255</span><span class="measure-unit">米</span> 
+                <span style="margin-left: 12px; font-size:0.9rem;">(旧时五里)</span>
+            </div>
+            <div style="margin-top: 0.8rem; font-size:0.95rem;">
+                <div>◉ 桥洞 <strong>361</strong> 座 (现存331)</div>
+                <div>◉ 方形石墩 <strong>300+</strong>   ◉ 半船形墩 <strong>22</strong> (分水尖)</div>
+            </div>
+            <div class="stone-row">
+                <span class="stone-tag">石梁最长 11米</span>
+                <span class="stone-tag">最重约 25吨</span>
+                <span class="stone-tag">花岗岩</span>
+                <span class="stone-tag">泉州白石</span>
+            </div>
+            <!-- 简单桥墩剖面示意图 (手工感) -->
+            <div class="pier-svg">
+                <div class="pier pier1"></div>
+                <div class="pier pier2"></div>
+                <div class="pier pier3"></div>
+                <div class="pier pier4"></div>
+                <div class="pier pier5"></div>
+                <div class="pier pier6"></div>
+            </div>
+            <div style="font-size: 0.8rem; text-align: center; color:#6b5d4e;">—— 桥墩高低因海床而异，船形墩破水护桥 ——</div>
+        </div>
+
+        <!-- 卡片三：建筑构造与碑记 (已去除所有庙宇塔相关内容) -->
+        <div class="card">
+            <h3><i>🏛️</i> 桥上构造与碑记</h3>
+            <ul style="list-style-type:'⚙️ '; padding-left: 1.5rem; margin-bottom: 0.8rem;">
+                <li>水心亭（晋南交界）</li>
+                <li>历代修桥碑记 13方</li>
+            </ul>
+            <div style="background:#ddd0bc; height:2px; margin:1rem 0;"></div>
+            <div style="font-size:0.9rem;">
+                <span style="background:#c3aa8f; padding:0.1rem 0.5rem;">✧ 智慧：</span>“激浪鼓潮，以条石横压叠砌，蛎房加固” —— 牡蛎固基法
+            </div>
+            <div style="margin-top: 1rem; border: 1px dashed #aa917a; padding: 0.5rem; border-radius: 12px;">
+                <span style="font-weight:600;">🎋 古代基建奇迹</span><br>
+                利用潮汐涨落浮运架设巨石，潮水为起重机。
+            </div>
+        </div>
+    </div>
+
+    <!-- 下栏：故事叙述 + 传统题字 (无宗教内容) -->
+    <div class="cultural-marginalia">
+        <div class="story-block">
+            <p>安平桥，横跨晋江安海与南安水头之间的五里海湾，始建于南宋绍兴八年（1138年）。它不仅是古代泉州港的交通要道，更是商贾云集、舟车辐辏的见证。桥上曾有茶馆、商铺，行人络绎不绝，桥下千帆竞渡，直通大海。八百多年来，它历经潮汐、地震和战火，依然巍然挺立，被誉为“天下无桥长此桥”。如今，我们通过信息可视化，让这座古桥的故事在数字世界继续传颂。</p>
+        </div>
+        <div class="inscription-box">
+            <span>天下第一长桥</span>
+        </div>
+    </div>
+
+    <!-- 交互按钮 (静态示意) -->
+    <div class="interaction-area">
+        <div class="handmade-button" role="button" tabindex="0" aria-label="查看潮汐涨落模拟（静态示意）">
+            <span>🌊</span> 点击观潮 (静态示意)
+        </div>
+    </div>
+
+    <!-- 完全装饰，模仿手绘涂鸦 -->
+    <div class="scribble">安平桥·手稿</div>
+</div>
+
+<!-- 页脚签名 -->
+<div style="max-width:1100px; margin: 1rem auto 0; text-align: right; font-size:0.75rem; color:#a28f7c; border-top: 1px dotted #d0bfae; padding-top:0.5rem;">
+    ⚒️ 资料汇编自《安海志》及现场踏勘 · 信息更新于2025年秋
+</div>
+
+</body>
+</html>
